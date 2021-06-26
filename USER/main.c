@@ -19,7 +19,7 @@ extern rec_data_t recdata;
 
   
 int main(void)
-{ 
+{  uint16_t val =0;
 	float vol =0;
 	u16 channel;
 	u8 t=0; 
@@ -31,6 +31,7 @@ AD5689_Init();
 	while(1)
 	{
 
+		
 		if(recdata.dataflag==1)
 		{
 			recdata.dataflag=0;
@@ -56,7 +57,7 @@ AD5689_Init();
 			memset(recdata.databuf,0,recdata.datalen);
 		}
 			
-		//delay_ms(2);
+	//	delay_ms(2);
 	LED0=!LED0;
 	}		    
 }
