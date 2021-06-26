@@ -29,32 +29,32 @@ void SPI1_Init(void)
  
   //GPIOFB3,4,5初始化设置
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5;//PB3~5复用功能输出	
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;//复用功能
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;//推挽输出
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;//100MHz
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;//上拉
   GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化
 	
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource3,GPIO_AF_SPI1); //PB3复用为 SPI1
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_SPI1); //PB4复用为 SPI1
-	GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_SPI1); //PB5复用为 SPI1
- 
-	//这里只针对SPI口初始化
-	RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1,ENABLE);//复位SPI1
-	RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1,DISABLE);//停止复位SPI1
+//	GPIO_PinAFConfig(GPIOB,GPIO_PinSource3,GPIO_AF_SPI1); //PB3复用为 SPI1
+//	GPIO_PinAFConfig(GPIOB,GPIO_PinSource4,GPIO_AF_SPI1); //PB4复用为 SPI1
+//	GPIO_PinAFConfig(GPIOB,GPIO_PinSource5,GPIO_AF_SPI1); //PB5复用为 SPI1
+// 
+//	//这里只针对SPI口初始化
+//	RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1,ENABLE);//复位SPI1
+//	RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI1,DISABLE);//停止复位SPI1
 
-	SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Tx;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
-	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
-	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;		//设置SPI的数据大小:SPI发送接收8位帧结构
-	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
-	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
-	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2;		//定义波特率预分频的值:波特率预分频值为256
-	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
-	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
-	SPI_Init(SPI1, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
- 
-	SPI_Cmd(SPI1, ENABLE); //使能SPI外设
+//	SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Tx;  //设置SPI单向或者双向的数据模式:SPI设置为双线双向全双工
+//	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;		//设置SPI工作模式:设置为主SPI
+//	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;		//设置SPI的数据大小:SPI发送接收8位帧结构
+//	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;		//串行同步时钟的空闲状态为高电平
+//	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;	//串行同步时钟的第二个跳变沿（上升或下降）数据被采样
+//	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;		//NSS信号由硬件（NSS管脚）还是软件（使用SSI位）管理:内部NSS信号有SSI位控制
+//	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;		//定义波特率预分频的值:波特率预分频值为256
+//	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;	//指定数据传输从MSB位还是LSB位开始:数据传输从MSB位开始
+//	SPI_InitStructure.SPI_CRCPolynomial = 7;	//CRC值计算的多项式
+//	SPI_Init(SPI1, &SPI_InitStructure);  //根据SPI_InitStruct中指定的参数初始化外设SPIx寄存器
+// 
+//	SPI_Cmd(SPI1, ENABLE); //使能SPI外设
 ControlPin_Init();
 	//SPI1_ReadWriteByte(0xff);//启动传输		 
 }   
@@ -112,33 +112,6 @@ static void delay(void)
   }  
 }
 
-void AD5689_SetRegisterValuet(uint8_t command,uint16_t channel,uint16_t data)
-{
-  uint8_t reg[3]={0};
-	u8 i=0;
-  
-  reg[0]=(command<<4)|channel;
-  reg[1]=(data>>8)&0xFF;
-  reg[2]=data&0xFF;
-
-  AD5689_SYNC=0;
-  delay();
-//	delay_ms(1);
-	for(i=0;i<3;i++)
-	{
-		//*((uint8_t*)&(SPI1->DR) + 1 ) = reg[i];
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//等待发送区空  
-//	while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_TXE) == RESET){};
-//		while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY) == RESET){};
-		SPI_I2S_SendData(SPI1, reg[i]); //通过外设SPIx发送一个byte  数据
-		
-	//	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY) ==SET);
-	}
-	//delay_ms(1);
-   delay();
-  AD5689_SYNC=1;
-}
-
 void set_sync(uint8_t moudle,uint8_t val)
 {
 	if(moudle==0)
@@ -152,41 +125,77 @@ void set_sync(uint8_t moudle,uint8_t val)
 
 void AD5689_SetRegisterValue(uint8_t moudle,uint8_t command,uint16_t channel,uint16_t data)
 {
-//  uint8_t reg[DACNUM*3]={0};
+  uint32_t reg=0;
+  uint8_t i;
+  
+  reg=(command<<20)|(channel<<16);
+  reg |=data;
+  
+  set_sync(moudle,0);
+  delay();
+  
+	for(i=0;i<24;i++)
+	{
+		if (reg&0x800000)
+		{
+			AD5689_MOSI_HIGH();
+		}
+		else
+		{
+			AD5689_MOSI_LOW();
+		}
+		AD5689_SCK_HIGH();
+		reg <<= 1;
+    delay();
+		AD5689_SCK_LOW();
+    delay();
+	}
+	delay();
+	set_sync(moudle,1);
+  delay();
+ 
+}
+
+
+
+
+//void AD5689_SetRegisterValue(uint8_t moudle,uint8_t command,uint16_t channel,uint16_t data)
+//{
+////  uint8_t reg[DACNUM*3]={0};
+////	u8 i=0;
+////  
+////	memset(reg,0,DACNUM*3);
+////  reg[moudle*3]=(command<<4)|channel;
+////  reg[1+moudle*3]=(data>>8)&0xFF;
+////  reg[2+moudle*3]=data&0xFF;
+
+//	  uint8_t reg[3]={0};
 //	u8 i=0;
 //  
-//	memset(reg,0,DACNUM*3);
-//  reg[moudle*3]=(command<<4)|channel;
-//  reg[1+moudle*3]=(data>>8)&0xFF;
-//  reg[2+moudle*3]=data&0xFF;
-
-	  uint8_t reg[3]={0};
-	u8 i=0;
-  
-  reg[0]=(command<<4)|channel;
-  reg[1]=(data>>8)&0xFF;
-  reg[2]=data&0xFF;
-	
-	
-	set_sync(moudle,0);
- // AD5689_SYNC=0;
-  delay();
-//	delay_ms(1);
-	for(i=0;i<3;i++)
-	{
-		//*((uint8_t*)&(SPI1->DR) + 1 ) = reg[i];
-		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//等待发送区空  
-//	while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_TXE) == RESET){};
-//		while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY) == RESET){};
-		SPI_I2S_SendData(SPI1, reg[i]); //通过外设SPIx发送一个byte  数据
-		
-	//	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY) ==SET);
-	}
-	//delay_us(100);
-  delay();
- // AD5689_SYNC=1;
-	set_sync(moudle,1);
-}
+//  reg[0]=(command<<4)|channel;
+//  reg[1]=(data>>8)&0xFF;
+//  reg[2]=data&0xFF;
+//	
+//	
+//	set_sync(moudle,0);
+// // AD5689_SYNC=0;
+//  delay();
+////	delay_ms(1);
+//	for(i=0;i<3;i++)
+//	{
+//		//*((uint8_t*)&(SPI1->DR) + 1 ) = reg[i];
+//		while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET){}//等待发送区空  
+////	while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_TXE) == RESET){};
+////		while(SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_BSY) == RESET){};
+//		SPI_I2S_SendData(SPI1, reg[i]); //通过外设SPIx发送一个byte  数据
+//		
+//	//	while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_BSY) ==SET);
+//	}
+//	//delay_us(100);
+//  delay();
+// // AD5689_SYNC=1;
+//	set_sync(moudle,1);
+//}
 
 
 /**
@@ -277,7 +286,7 @@ void AD5689_Init(void)
 //  AD5689_RESRT=1;
 //  delay_ms(5);
 	
- // AD5689_Reset();
+  AD5689_Reset();
 	
   AD5689_LDAC_MASK(LDAC_Disable,LDAC_Disable);
 	//AD5689_DAISYCHAIN_OPERATION(DCEN_mode);
