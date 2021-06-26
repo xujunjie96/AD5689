@@ -7,12 +7,12 @@
 #include "spi.h"
 #include "string.h"
 #include <stdlib.h>
-//ALIENTEK Ì½Ë÷ÕßSTM32F407¿ª·¢°å ÊµÑé23
-//DMA ÊµÑé-¿âº¯Êı°æ±¾  
-//¼¼ÊõÖ§³Ö£ºwww.openedv.com
-//ÌÔ±¦µêÆÌ£ºhttp://eboard.taobao.com  
-//¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾  
-//×÷Õß£ºÕıµãÔ­×Ó @ALIENTEK
+//ALIENTEK æ¢ç´¢è€…STM32F407å¼€å‘æ¿ å®éªŒ23
+//DMA å®éªŒ-åº“å‡½æ•°ç‰ˆæœ¬  
+//æŠ€æœ¯æ”¯æŒï¼šwww.openedv.com
+//æ·˜å®åº—é“ºï¼šhttp://eboard.taobao.com  
+//å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸  
+//ä½œè€…ï¼šæ­£ç‚¹åŸå­ @ALIENTEK
 
 extern rec_data_t recdata;
 
@@ -23,10 +23,10 @@ int main(void)
 	float vol =0;
 	u16 channel;
 	u8 t=0; 
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//ÉèÖÃÏµÍ³ÖĞ¶ÏÓÅÏÈ¼¶·Ö×é2
-	delay_init(168);     //³õÊ¼»¯ÑÓÊ±º¯Êı
-	uart_init(921600);	//³õÊ¼»¯´®¿Ú²¨ÌØÂÊÎª115200
-	LED_Init();					//³õÊ¼»¯LED 
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//è®¾ç½®ç³»ç»Ÿä¸­æ–­ä¼˜å…ˆçº§åˆ†ç»„2
+	delay_init(168);     //åˆå§‹åŒ–å»¶æ—¶å‡½æ•°
+	uart_init(921600);	//åˆå§‹åŒ–ä¸²å£æ³¢ç‰¹ç‡ä¸º115200
+	LED_Init();					//åˆå§‹åŒ–LED 
 AD5689_Init();
 	while(1)
 	{
@@ -56,7 +56,7 @@ AD5689_Init();
 			memset(recdata.databuf,0,recdata.datalen);
 		}
 			
-		delay_ms(2);
+		//delay_ms(2);
 	LED0=!LED0;
 	}		    
 }
