@@ -2,15 +2,15 @@
 #define __SPI_H
 #include "sys.h"
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32F407¿ª·¢°å
-//SPI Çı¶¯´úÂë	   
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2014/5/6
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2014-2024
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK STM32F407å¼€å‘æ¿
+//SPI é©±åŠ¨ä»£ç 	   
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2014/5/6
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2014-2024
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
 
@@ -20,6 +20,11 @@
 
 #define AD5689_SYNC PBout(6)	
 #define AD5689_SYNC1 PBout(7)		 
+
+#define AD5689_MOSI_HIGH() PBout(5)=1	
+#define AD5689_MOSI_LOW() PBout(5)=0	
+#define AD5689_SCK_HIGH() PBout(3)=1	
+#define AD5689_SCK_LOW() PBout(3)=0	
 
 #define     NormalOperation					0
 #define     R1K2GND									1
@@ -45,9 +50,9 @@
 #define CMD_DCEN_REG            		8
 #define CMD_READ_BACK          		  9
 					
-void SPI1_Init(void);			 //³õÊ¼»¯SPI1¿Ú
-void SPI1_SetSpeed(u8 SpeedSet); //ÉèÖÃSPI1ËÙ¶È   
-u8 SPI1_ReadWriteByte(u8 TxData);//SPI1×ÜÏß¶ÁĞ´Ò»¸ö×Ö½Ú
+void SPI1_Init(void);			 //åˆå§‹åŒ–SPI1å£
+void SPI1_SetSpeed(u8 SpeedSet); //è®¾ç½®SPI1é€Ÿåº¦   
+u8 SPI1_ReadWriteByte(u8 TxData);//SPI1æ€»çº¿è¯»å†™ä¸€ä¸ªå­—èŠ‚
 
 void set_vol(uint8_t channel,float vol);
 void AD5689_Init(void);
