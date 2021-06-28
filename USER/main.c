@@ -7,12 +7,6 @@
 #include "spi.h"
 #include "string.h"
 #include <stdlib.h>
-//ALIENTEK 探索者STM32F407开发板 实验23
-//DMA 实验-库函数版本  
-//技术支持：www.openedv.com
-//淘宝店铺：http://eboard.taobao.com  
-//广州市星翼电子科技有限公司  
-//作者：正点原子 @ALIENTEK
 
 extern rec_data_t recdata;
 
@@ -20,6 +14,8 @@ extern rec_data_t recdata;
   
 int main(void)
 {  uint16_t val =0;
+	u8 commaloc=0;
+	u8 i=0,j=0;
 	float vol =0;
 	u16 channel;
 	u8 t=0; 
@@ -39,13 +35,38 @@ AD5689_Init();
 			if(recdata.databuf[0]=='$' && recdata.databuf[2]==',' && recdata.databuf[1]>='0'&& recdata.databuf[1]<='3')
 			{
 				channel =  recdata.databuf[1]-'0';
-				vol=atol(&recdata.databuf[3]);
+				vol=atof(&recdata.databuf[3]);
 				if(vol>=5000)
 				{
 					vol=5000;
 				}
 				set_vol(channel,vol);
 				printf("commond ok:channel:%d,vol:%fmv\r\n",channel,vol);
+			}
+			else if(recdata.databuf[0]=='$' && recdata.databuf[2]!=','&& recdata.databuf[1]!=',')
+			{
+				vol=atof(&recdata.databuf[1]);
+				printf("commond ok:channel:1,vol:%fmv\r\n",vol);
+				for(i=0,j=1;i<recdata.datalen;i++)
+				{
+					if(recdata.databuf[i]==',')
+					{
+						vol=atof(&recdata.databuf[i+1]);
+						if(vol>=5000)
+						{
+							vol=5000;
+						}
+						printf("commond ok:channel:%d,vol:%fmv\r\n",j,vol);
+						set_vol(j,vol);
+						j++;
+						
+						if(j>=5)
+						{
+							break;
+						}
+						
+					}
+				}
 			}
 			else
 			{
