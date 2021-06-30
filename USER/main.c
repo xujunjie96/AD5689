@@ -46,8 +46,10 @@ AD5689_Init();
 			else if(recdata.databuf[0]=='$' && recdata.databuf[2]!=','&& recdata.databuf[1]!=',')
 			{
 				vol=atof(&recdata.databuf[1]);
-				printf("commond ok:channel:1,vol:%fmv\r\n",vol);
-				for(i=0,j=2;i<recdata.datalen;i++)
+                                 set_vol(0,vol);
+
+				printf("commond ok:channel:0,vol:%fmv\r\n",vol);
+				for(i=0,j=1;i<recdata.datalen;i++)
 				{
 					if(recdata.databuf[i]==',')
 					{
@@ -60,7 +62,7 @@ AD5689_Init();
 						set_vol(j,vol);
 						j++;
 						
-						if(j>=5)
+						if(j>=1)
 						{
 							break;
 						}
