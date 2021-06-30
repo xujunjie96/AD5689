@@ -62,7 +62,7 @@ AD5689_Init();
 						set_vol(j,vol);
 						j++;
 						
-						if(j>=1)
+						if(j>=4) 
 						{
 							break;
 						}
