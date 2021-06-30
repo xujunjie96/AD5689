@@ -47,7 +47,7 @@ AD5689_Init();
 			{
 				vol=atof(&recdata.databuf[1]);
 				printf("commond ok:channel:1,vol:%fmv\r\n",vol);
-				for(i=0,j=1;i<recdata.datalen;i++)
+				for(i=0,j=2;i<recdata.datalen;i++)
 				{
 					if(recdata.databuf[i]==',')
 					{
